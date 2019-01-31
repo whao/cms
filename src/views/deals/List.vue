@@ -3,34 +3,7 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-2 ">
-                    <aside class="menu is-hidden-mobile">
-                        <p class="menu-label">
-                            Deals
-                        </p>
-                        <ul class="menu-list">
-                            <li><a>Dashboard</a></li>
-                            <li><a class="is-active">Recent Deals</a></li>
-                        </ul>
-                        <p class="menu-label">
-                            Administration
-                        </p>
-                        <ul class="menu-list">
-                            <li>
-                                <a>Deal Setting</a>
-                                <ul>
-                                    <li><a>Category</a></li>
-                                    <li><a>Keyword</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a>CMS User Setting</a>
-                                <ul>
-                                    <li><a>Users</a></li>
-                                    <li><a>Add User</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </aside>
+                    <left-bar></left-bar>
                 </div>
                 <div class="column is-10">
                     <nav class="breadcrumb" aria-label="breadcrumbs">
@@ -50,6 +23,7 @@
 </template>
 
 <script>
+    import LeftBar from "./LeftBar"
     export default {
         data() {
             return {
@@ -86,6 +60,9 @@
                     }
                 ]
             }
+        },
+        components: {
+            LeftBar
         }
     }
 </script>

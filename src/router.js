@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Deals from './views/Deals.vue'
-import DealsList from './views/Deals/List'
+import DealsDashboard from './views/deals/Dashboard'
+import DealsList from './views/deals/List'
+import DealsNew from './views/deals/New'
 
 Vue.use(Router)
 
@@ -9,21 +10,15 @@ export default new Router({
   routes: [
     {
       path: '/deals',
-      name: 'deals',
-      component: Deals
+      component: DealsDashboard
     },
     {
       path: '/deals/list',
-      name: 'deals-list',
       component: DealsList
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path: '/deals/new',
+      component: DealsNew
     }
   ]
 })
