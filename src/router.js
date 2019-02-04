@@ -14,6 +14,7 @@ export default new Router({
     },
     {
       path: '/deals/list',
+      name: 'deal-list',
       component: DealsList
     },
     {

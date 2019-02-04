@@ -1,68 +1,143 @@
 <template>
-    <div id="app">
-        <div class="container">
-            <div class="columns">
-                <div class="column is-2 ">
-                    <left-bar></left-bar>
-                </div>
-                <div class="column is-10">
-                    <nav class="breadcrumb" aria-label="breadcrumbs">
-                        <ul>
-                            <li><a href="..">Mindeal</a></li>
-                            <li><a href="..">Deals</a></li>
-                            <li class="is-active"><a href="#" aria-current="page">List</a></li>
-                        </ul>
-                    </nav>
-                    <section>
-                        <b-table :data="data" :columns="columns" :paginated="true" :pagination-simple="false"></b-table>
-                    </section>
-                </div>
-            </div>
+  <div id="app">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-2 ">
+          <left-bar></left-bar>
         </div>
+        <div class="column is-10">
+          <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+              <li><a href="..">Mindeal</a></li>
+              <li><a href="..">Deals</a></li>
+              <li class="is-active"><a href="#" aria-current="page">List</a></li>
+            </ul>
+          </nav>
+          <section>
+            <b-field>
+              <b-radio-button v-model="status" native-value="published" type="is-success">
+                <span>已发布</span>
+              </b-radio-button>
+
+              <b-radio-button v-model="status" native-value="draft" type="is-warning">
+                <span>草稿</span>
+              </b-radio-button>
+            </b-field>
+          </section>
+          <section>
+            <b-table
+                    :data="data"
+                    :total="total"
+                    paginated
+                    pagination-simple
+                    backend-pagination
+                    :per-page="perPage"
+                    @page-change="onPageChange"
+                    :loading="loading">
+              <template slot-scope="props">
+                <b-table-column field="title" label="标题">
+                  <a @click="editModal(props.row)">
+                    {{ props.row.title }}
+                  </a>
+                </b-table-column>
+                <b-table-column field="category" label="分类">
+                  {{ props.row.category}}
+                </b-table-column>
+                <b-table-column field="status" label="状态">
+                  {{ props.row.status }}
+                </b-table-column>
+                <b-table-column field="created_at" label="创建时间">
+                  {{ new Date(parseInt(props.row.created_at)) | moment('MM/DD/YYYY HH:mm')}}
+                </b-table-column>
+              </template>
+            </b-table>
+          </section>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
     import LeftBar from "./LeftBar"
+    import EditModal from "./EditModal"
+
     export default {
         data() {
             return {
-                data: [
-                    { 'id': 1, 'title': 'Christian Louboutin情人节套装，包括经典红色指甲油和口红', 'author': '猪猪', 'date': '2016-10-15 13:43:27', 'gender': 'Male', 'status': '已发布' },
-                    { 'id': 2, 'title': 'Burberry 19年春季限量格纹腮红，不管是收藏还是自用都不错', 'author': '猪猪', 'date': '2016-12-15 06:00:53', 'gender': 'Male', 'status': '草稿' },
-                    { 'id': 3, 'title': 'Yuzefi新一季的包包可以85折收啦，Code【CNY15】', 'author': '猪猪', 'date': '2016-04-26 06:26:28', 'gender': 'Female', 'status': '草稿' },
-                    { 'id': 4, 'title': '这双超好看的Roger Vivier现在85折收，Code【CNY15】', 'author': '猪猪', 'date': '2016-04-10 10:28:46', 'gender': 'Male', 'status': '已发布' },
-                    { 'id': 5, 'title': '要过年啦~Gucci庆祝中国春节的猪猪限定看一看，肉嘟嘟的可爱', 'author': '猪猪', 'date': '2016-12-06 14:38:38', 'gender': 'Female', 'status': '已发布' }
-                ],
-                columns: [
-                    {
-                        field: 'id',
-                        label: 'ID',
-                        width: '40',
-                        numeric: true
-                    },
-                    {
-                        field: 'title',
-                        label: 'Title',
-                    },
-                    {
-                        field: 'author',
-                        label: '编辑',
-                    },
-                    {
-                        field: 'status',
-                        label: '状态',
-                    },
-                    {
-                        field: 'date',
-                        label: 'Date',
-                        centered: true
-                    }
-                ]
+                data: [],
+                total: 999,
+                page: 1,
+                perPage: 5,
+                lastId: null,
+                lastEpoch: null,
+                loading: false,
+                status: 'published',
+                lastItem: null,
             }
         },
-        components: {
-            LeftBar
+        components: {LeftBar},
+        methods: {
+            search(forward) {
+                const api = this.$store.state.api.url;
+                this.loading = true;
+                this.axios.get(api + '/deals?status=' + this.status + '&lastId=' + this.lastId + '&lastEpoch=' + this.lastEpoch + '&perPage=' + this.perPage + '&forward=' + forward, this.$data).then((response) => {
+                    console.log(response.data.Items);
+                    if (forward) {
+                        this.data = response.data.Items;
+                        this.data.push(this.lastItem[0]);
+                    } else {
+                        this.data = response.data.Items;
+                    }
+                    if (response.data.lastId) {
+                        this.lastId = response.data.lastId.id;
+                        this.lastEpoch = response.data.lastId.created_at;
+                    }
+                    this.loading = false;
+                })
+            },
+            reset() {
+                this.page = 1;
+                this.lastId = null;
+                this.lastEpoch = null;
+                this.lastItem = null;
+            },
+            onPageChange(page) {
+                if (page > this.page) {
+                    this.lastItem = this.data.splice(this.perPage - 1);
+                    this.search(false);
+                } else {
+                    this.search(true);
+                }
+                this.page = page;
+            },
+            editModal(deal) {
+                this.$modal.open({
+                    parent: this,
+                    component: EditModal,
+                    hasModalCard: true,
+                    props: {
+                        deal: {
+                            id: deal.id,
+                            title: deal.title,
+                            url: deal.url,
+                            category: deal.category,
+                            status: deal.status,
+                            body: deal.body,
+                            created_at: deal.created_at
+                        }
+                    }
+                })
+            }
+        },
+        watch: {
+            status: function () {
+                this.reset();
+                this.search(false);
+            }
+        },
+        mounted() {
+            this.search(false);
         }
     }
 </script>
