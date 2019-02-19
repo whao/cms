@@ -4,9 +4,9 @@
     <nav class="navbar is-white">
       <div class="container">
         <div class="navbar-brand">
-          <a class="navbar-item brand-text" href="../">
+          <router-link class="navbar-item brand-text" to="/">
             Mindeal Dashboard
-          </a>
+          </router-link>
           <div class="navbar-burger burger" data-target="navMenu">
             <span></span>
             <span></span>
@@ -15,16 +15,16 @@
         </div>
         <div id="navMenu" class="navbar-menu">
           <div class="navbar-start">
-            <router-link to="/deals" class="navbar-item">
+            <router-link to="/deals/list" class="navbar-item" :class="feature === 'deals' ? 'is-active' : ''">
               Deals
             </router-link>
-            <router-link to="/brands" class="navbar-item">
+            <router-link to="/brands/list" class="navbar-item" :class="feature === 'brands' ? 'is-active' : ''">
               品牌
             </router-link>
-            <router-link to="/shares" class="navbar-item">
+            <router-link to="/shares" class="navbar-item" :class="feature === 'shares' ? 'is-active' : ''">
               晒单
             </router-link>
-            <router-link to="/about" class="navbar-item">
+            <router-link to="/users" class="navbar-item" :class="feature === 'users' ? 'is-active' : ''">
               APP Users
             </router-link>
           </div>
@@ -34,6 +34,16 @@
     <router-view/>
   </div>
 </template>
+
+<script>
+  export default  {
+      computed: {
+          feature: function () {
+              return this.$route.path.split('/')[1];
+          }
+      }
+  }
+</script>
 
 <style>
   html, body {

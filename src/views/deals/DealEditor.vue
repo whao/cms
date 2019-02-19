@@ -16,8 +16,45 @@
                   v-validate="'required'"></b-input>
         </b-field>
 
-        <b-field label="URL">
-          <b-input v-model="dealToEdit.url"></b-input>
+        <b-field grouped>
+          <b-field label="购买链接">
+            <b-input v-model="dealToEdit.url"></b-input>
+          </b-field>
+          <b-field label="图片链接">
+            <b-input v-model="dealToEdit.picture"></b-input>
+          </b-field>
+        </b-field>
+
+
+        <b-field grouped>
+          <b-field
+                  label="原价"
+                  :type="{'is-danger': errors.has('msrp')}"
+                  :message="errors.first('msrp')">
+            <b-input
+                    name="msrp"
+                    v-model="dealToEdit.msrp"
+                    v-validate="'required'"></b-input>
+          </b-field>
+
+          <b-field
+                  label="现价"
+                  :type="{'is-danger': errors.has('price')}"
+                  :message="errors.first('price')">
+            <b-input
+                    name="price"
+                    v-model="dealToEdit.price"
+                    v-validate="'required'"></b-input>
+          </b-field>
+
+          <b-field
+                  label="折扣码"
+                  :type="{'is-danger': errors.has('coupon')}"
+                  :message="errors.first('coupon')">
+            <b-input
+                    name="coupon"
+                    v-model="dealToEdit.coupon"></b-input>
+          </b-field>
         </b-field>
 
         <b-field grouped>
@@ -34,6 +71,15 @@
               <option value="published">已发布</option>
               <option value="draft">草稿</option>
             </b-select>
+          </b-field>
+
+          <b-field label="标签">
+            <b-taginput
+                    v-model="dealToEdit.tags"
+                    :data="tags"
+                    :allow-new="true"
+                    placeholder="添加标签">
+            </b-taginput>
           </b-field>
         </b-field>
 
@@ -55,9 +101,10 @@
     export default {
         props: ['deal', 'editor-title', 'editor-submit'],
         data() {
-           return {
-               categories: []
-           }
+            return {
+                categories: [],
+                tags: ['独家', '直邮']
+            }
         },
         computed: {
             dealToEdit: function () {
@@ -68,7 +115,6 @@
             loadCategories() {
                 const api = this.$store.state.api.url;
                 this.axios.get(api + '/meta/category').then((response) => {
-                    console.log(response);
                     this.categories = response.data.Items;
                 });
             },

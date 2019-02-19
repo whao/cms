@@ -1,16 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import DealsDashboard from './views/deals/Dashboard'
+import Dashboard from './views/Dashboard'
 import DealsList from './views/deals/List'
 import DealsNew from './views/deals/New'
+import DealsCategory from "./views/deals/settings/Category"
+import BrandList from './views/brands/List'
+import BrandNew from './views/brands/New'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: '/deals',
-      component: DealsDashboard
+      path: '/',
+      component: Dashboard
     },
     {
       path: '/deals/list',
@@ -20,6 +23,19 @@ export default new Router({
     {
       path: '/deals/new',
       component: DealsNew
-    }
+    },
+    {
+      path: '/deals/category',
+      component: DealsCategory
+    },
+    {
+      path: '/brands/list',
+      name: 'brand-list',
+      component: BrandList
+    },
+    {
+      path: '/brands/new',
+      component: BrandNew
+    },
   ]
 })

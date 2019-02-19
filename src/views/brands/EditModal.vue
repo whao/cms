@@ -1,12 +1,12 @@
 <template>
   <div>
-    <deal-editor :deal="deal" editor-title="Edit deal" editor-submit="Update" @deal-saved="update"></deal-editor>
+    <brand-editor :brand="brand" editor-title="Edit brand" editor-submit="Update" @brand-saved="update"></brand-editor>
     <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
   </div>
 </template>
 
 <script>
-    import DealEditor from "./DealEditor"
+    import BrandEditor from "./BrandEditor"
 
     export default {
         data() {
@@ -14,16 +14,16 @@
                 isLoading: false
             }
         },
-        props: ['deal'],
-        components: {DealEditor},
+        props: ['brand'],
+        components: {BrandEditor},
         methods: {
-            update(deal) {
+            update(brand) {
                 this.isLoading = true;
                 const api = this.$store.state.api.url;
                 const tmp = document.createElement('DIV');
-                tmp.innerHTML = deal.body;
-                deal.txt = tmp.textContent || tmp.innerText || '';
-                this.axios.put(api + '/deals/' + deal.id, deal).then(() => {
+                tmp.innerHTML = brand.body;
+                brand.txt = tmp.textContent || tmp.innerText || '';
+                this.axios.put(api + '/brands/' + brand.id, brand).then(() => {
                     this.isLoading = false;
                     this.$toast.open({
                         duration: 3000,

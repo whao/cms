@@ -8,7 +8,7 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><router-link to="/">Mindeal</router-link></li>
-            <li class="is-active"><a href="#" aria-current="page">Deal List</a></li>
+            <li class="is-active"><a href="#" aria-current="page">Brand List</a></li>
           </ul>
         </nav>
         <section>
@@ -36,26 +36,10 @@
                   @page-change="onPageChange"
                   :loading="loading">
             <template slot-scope="props">
-              <b-table-column>
-                <figure class="image is-64x64">
-                  <img :src="props.row.picture">
-                </figure>
-              </b-table-column>
-              <b-table-column field="title" label="标题">
+              <b-table-column field="title" label="品牌名称">
                 <a @click="editModal(props.row)">
-                  {{ props.row.title }}
+                  {{ props.row.name }}
                 </a>
-              </b-table-column>
-              <b-table-column field="url" label="链接" width="100">
-                <a :href="props.row.url" target="_blank">
-                  <b-icon icon="external-link-square-alt"></b-icon>
-                </a>
-              </b-table-column>
-              <b-table-column field="category" label="原价/折扣" width="100">
-                {{ props.row.msrp}} / {{ props.row.price}}
-              </b-table-column>
-              <b-table-column field="category" label="分类" width="100">
-                {{ props.row.category}}
               </b-table-column>
               <b-table-column field="created_at" label="创建时间" width="160">
                 {{ new Date(parseInt(props.row.created_at)) | moment('MM/DD/YYYY HH:mm')}}
@@ -92,7 +76,7 @@
             search() {
                 const api = this.$store.state.api.url;
                 this.loading = true;
-                this.axios.get(api + '/deals?status=' + this.status + '&lastId=' + this.lastId + '&lastEpoch=' + this.lastEpoch + '&perPage=' + this.perPage + '&forward=' + this.forward, this.$data).then((response) => {
+                this.axios.get(api + '/brands?status=' + this.status + '&lastId=' + this.lastId + '&lastEpoch=' + this.lastEpoch + '&perPage=' + this.perPage + '&forward=' + this.forward, this.$data).then((response) => {
                     if (this.forward) {
                         this.data = response.data.items;
                         this.data.push(this.lastItem[0]);
@@ -140,29 +124,25 @@
                 this.search();
                 this.page = page;
             },
-            editModal(deal) {
+            editModal(brand) {
                 this.$modal.open({
                     parent: this,
                     component: EditModal,
                     hasModalCard: true,
                     props: {
-                        deal: {
-                            id: deal.id,
-                            title: deal.title,
-                            url: deal.url,
-                            picture: deal.picture,
-                            category: deal.category,
-                            status: deal.status,
-                            tags: deal.tags ? deal.tags.values : [],
-                            msrp: deal.msrp,
-                            price: deal.price,
-                            coupon: deal.coupon,
-                            body: deal.body,
-                            created_at: deal.created_at
+                        brand: {
+                            id: brand.id,
+                            name: brand.name,
+                            url: brand.url,
+                            picture: brand.picture,
+                            status: brand.status,
+                            tags: brand.tags ? brand.tags.values : [],
+                            body: brand.body,
+                            created_at: brand.created_at
                         }
                     },
                     events: {
-                        'deal-updated': self => {
+                        'brand-updated': self => {
                             self.close();
                             this.reset();
                             this.search(false);
