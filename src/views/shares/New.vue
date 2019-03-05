@@ -8,11 +8,11 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><router-link to="/">Mindeal</router-link></li>
-            <li class="is-active"><a href="#" aria-current="page">添加新折扣</a></li>
+            <li class="is-active"><a href="#" aria-current="page">添加新品牌</a></li>
           </ul>
         </nav>
         <section>
-          <editor :deal="deal" editor-title="Add New Deal" editor-submit="Submit" @deal-saved="save"></editor>
+          <editor :brand="brand" editor-title="Add New Brand" editor-submit="Submit" @brand-saved="save"></editor>
           <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
         </section>
       </div>
@@ -22,21 +22,17 @@
 
 <script>
     import LeftBar from "./LeftBar"
-    import Editor from "./DealEditor"
+    import Editor from "./ShareEditor"
 
     export default {
         data() {
             return {
-                deal: {
-                    title: '',
+                brand: {
+                    name: '',
                     url: '',
                     picture: '',
-                    category: '',
                     status: 'draft',
                     tags: [],
-                    msrp: '',
-                    price: '',
-                    coupon: '',
                     body: ''
                 },
                 isLoading: false,
@@ -44,31 +40,27 @@
         },
         components: {LeftBar, Editor},
         methods: {
-            save(deal) {
+            save(brand) {
                 this.isLoading = true;
                 const api = this.$store.state.api.url;
                 const tmp = document.createElement('DIV');
-                tmp.innerHTML = deal.body;
-                deal.txt = tmp.textContent || tmp.innerText || '';
-                this.axios.post(api + '/deals', deal).then(() => {
+                tmp.innerHTML = brand.body;
+                brand.txt = tmp.textContent || tmp.innerText || '';
+                this.axios.post(api + '/brands', brand).then(() => {
                     this.deal = {
-                        title: '',
+                        name: '',
                         url: '',
                         picture: '',
-                        category: '',
                         status: 'draft',
                         tags: [],
-                        msrp: '',
-                        price: '',
-                        coupon: '',
                         body: ''
                     };
                     this.$toast.open({
                         duration: 5000,
-                        message: 'Deal已保存',
+                        message: 'Brand已保存',
                         type: 'is-success'
                     });
-                    this.$router.push({name: 'deal-list'});
+                    this.$router.push({name: 'brand-list'});
                 })
             }
         }

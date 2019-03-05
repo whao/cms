@@ -5,7 +5,7 @@
       <div class="container">
         <div class="navbar-brand">
           <router-link class="navbar-item brand-text" to="/">
-            Mindeal Dashboard
+            Mindeal CMS
           </router-link>
           <div class="navbar-burger burger" data-target="navMenu">
             <span></span>
@@ -16,12 +16,12 @@
         <div id="navMenu" class="navbar-menu">
           <div class="navbar-start">
             <router-link to="/deals/list" class="navbar-item" :class="feature === 'deals' ? 'is-active' : ''">
-              Deals
+              折扣
             </router-link>
             <router-link to="/brands/list" class="navbar-item" :class="feature === 'brands' ? 'is-active' : ''">
               品牌
             </router-link>
-            <router-link to="/shares" class="navbar-item" :class="feature === 'shares' ? 'is-active' : ''">
+            <router-link to="/shares/list" class="navbar-item" :class="feature === 'shares' ? 'is-active' : ''">
               晒单
             </router-link>
             <router-link to="/users" class="navbar-item" :class="feature === 'users' ? 'is-active' : ''">

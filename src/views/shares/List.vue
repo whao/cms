@@ -8,7 +8,7 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><router-link to="/">Mindeal</router-link></li>
-            <li class="is-active"><a href="#" aria-current="page">折扣列表</a></li>
+            <li class="is-active"><a href="#" aria-current="page">晒单列表</a></li>
           </ul>
         </nav>
         <section>
@@ -18,6 +18,10 @@
           <b-field>
             <b-radio-button v-model="status" native-value="published" type="is-success">
               <span>已发布</span>
+            </b-radio-button>
+
+            <b-radio-button v-model="status" native-value="submitted" type="is-warning">
+              <span>待审核</span>
             </b-radio-button>
 
             <b-radio-button v-model="status" native-value="draft" type="is-warning">
@@ -36,7 +40,7 @@
                   @page-change="onPageChange"
                   :loading="loading">
             <template slot-scope="props">
-              <b-table-column>
+              <b-table-column width="80">
                 <figure class="image is-64x64">
                   <img :src="props.row.picture">
                 </figure>
@@ -46,21 +50,10 @@
                   {{ props.row.title }}
                 </a>
               </b-table-column>
-              <b-table-column field="url" label="链接" width="100">
+              <b-table-column field="url" label="官网" width="100">
                 <a :href="props.row.url" target="_blank">
                   <b-icon icon="external-link-square-alt"></b-icon>
                 </a>
-              </b-table-column>
-              <b-table-column label="标签" width="100">
-                <b-taglist>
-                  <b-tag v-for="(tag, index) in props.row.tags" :key="index">{{tag}}</b-tag>
-                </b-taglist>
-              </b-table-column>
-              <b-table-column field="category" label="原价/折扣" width="100">
-                {{ props.row.msrp}} / {{ props.row.price}}
-              </b-table-column>
-              <b-table-column field="category" label="分类" width="100">
-                {{ props.row.category}}
               </b-table-column>
               <b-table-column field="created_at" label="创建时间" width="160">
                 {{ new Date(parseInt(props.row.created_at)) | moment('MM/DD/YYYY HH:mm')}}
@@ -97,7 +90,7 @@
             search() {
                 const api = this.$store.state.api.url;
                 this.loading = true;
-                this.axios.get(api + '/deals?status=' + this.status + '&lastId=' + this.lastId + '&lastEpoch=' + this.lastEpoch + '&perPage=' + this.perPage + '&forward=' + this.forward, this.$data).then((response) => {
+                this.axios.get(api + '/shares?status=' + this.status + '&lastId=' + this.lastId + '&lastEpoch=' + this.lastEpoch + '&perPage=' + this.perPage + '&forward=' + this.forward, this.$data).then((response) => {
                     if (this.forward) {
                         this.data = response.data.items;
                         this.data.push(this.lastItem[0]);
@@ -145,29 +138,23 @@
                 this.search();
                 this.page = page;
             },
-            editModal(deal) {
+            editModal(share) {
                 this.$modal.open({
                     parent: this,
                     component: EditModal,
                     hasModalCard: true,
                     props: {
-                        deal: {
-                            id: deal.id,
-                            title: deal.title,
-                            url: deal.url,
-                            picture: deal.picture,
-                            category: deal.category,
-                            status: deal.status,
-                            tags: deal.tags ? deal.tags : [],
-                            msrp: deal.msrp,
-                            price: deal.price,
-                            coupon: deal.coupon,
-                            body: deal.body,
-                            created_at: deal.created_at
+                        share: {
+                            id: share.id,
+                            name: share.title,
+                            picture: share.picture,
+                            status: share.status,
+                            body: share.body,
+                            created_at: share.created_at
                         }
                     },
                     events: {
-                        'deal-updated': self => {
+                        'share-updated': self => {
                             self.close();
                             this.reset();
                             this.search(false);

@@ -8,7 +8,7 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><router-link to="/">Mindeal</router-link></li>
-            <li class="is-active"><a href="#" aria-current="page">Brand List</a></li>
+            <li class="is-active"><a href="#" aria-current="page">品牌列表</a></li>
           </ul>
         </nav>
         <section>
@@ -36,10 +36,25 @@
                   @page-change="onPageChange"
                   :loading="loading">
             <template slot-scope="props">
+              <b-table-column width="80">
+                <figure class="image is-64x64">
+                  <img :src="props.row.picture">
+                </figure>
+              </b-table-column>
               <b-table-column field="title" label="品牌名称">
                 <a @click="editModal(props.row)">
                   {{ props.row.name }}
                 </a>
+              </b-table-column>
+              <b-table-column field="url" label="官网" width="100">
+                <a :href="props.row.url" target="_blank">
+                  <b-icon icon="external-link-square-alt"></b-icon>
+                </a>
+              </b-table-column>
+              <b-table-column label="标签" width="200">
+                <b-taglist>
+                  <b-tag v-for="(tag, index) in (props.row.tags || props.row.tags)" :key="index">{{tag}}</b-tag>
+                </b-taglist>
               </b-table-column>
               <b-table-column field="created_at" label="创建时间" width="160">
                 {{ new Date(parseInt(props.row.created_at)) | moment('MM/DD/YYYY HH:mm')}}
@@ -136,7 +151,7 @@
                             url: brand.url,
                             picture: brand.picture,
                             status: brand.status,
-                            tags: brand.tags ? brand.tags.values : [],
+                            tags: brand.tags ? brand.tags : [],
                             body: brand.body,
                             created_at: brand.created_at
                         }

@@ -6,6 +6,8 @@ import DealsNew from './views/deals/New'
 import DealsCategory from "./views/deals/settings/Category"
 import BrandList from './views/brands/List'
 import BrandNew from './views/brands/New'
+import ShareList from './views/shares/List'
+import ShareNew from './views/shares/New'
 
 Vue.use(Router);
 
@@ -36,6 +38,15 @@ export default new Router({
     {
       path: '/brands/new',
       component: BrandNew
+    },
+    {
+      path: '/shares/list',
+      name: 'share-list',
+      component: ShareList
+    },
+    {
+      path: '/shares/new',
+      component: ShareNew
     },
   ]
 })

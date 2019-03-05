@@ -1,12 +1,12 @@
 <template>
   <div>
-    <brand-editor :brand="brand" editor-title="Edit brand" editor-submit="Update" @brand-saved="update"></brand-editor>
+    <share-editor :share="share" editor-title="Edit share" editor-submit="Update" @share-saved="update"></share-editor>
     <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
   </div>
 </template>
 
 <script>
-    import BrandEditor from "./BrandEditor"
+    import ShareEditor from "./ShareEditor"
 
     export default {
         data() {
@@ -14,23 +14,23 @@
                 isLoading: false
             }
         },
-        props: ['brand'],
-        components: {BrandEditor},
+        props: ['share'],
+        components: {ShareEditor},
         methods: {
-            update(brand) {
+            update(share) {
                 this.isLoading = true;
                 const api = this.$store.state.api.url;
                 const tmp = document.createElement('DIV');
-                tmp.innerHTML = brand.body;
-                brand.txt = tmp.textContent || tmp.innerText || '';
-                this.axios.put(api + '/brands/' + brand.id, brand).then(() => {
+                tmp.innerHTML = share.body;
+                share.txt = tmp.textContent || tmp.innerText || '';
+                this.axios.put(api + '/shares/' + share.id, share).then(() => {
                     this.isLoading = false;
                     this.$toast.open({
                         duration: 3000,
-                        message: 'Deal已更新',
+                        message: '晒单已更新',
                         type: 'is-success'
                     });
-                    this.$emit('brand-updated', this.$parent);
+                    this.$emit('share-updated', this.$parent);
                 })
             }
         }

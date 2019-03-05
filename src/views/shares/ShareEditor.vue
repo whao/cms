@@ -4,7 +4,7 @@
       {{ editorTitle }}
     </p></header>
     <div class="card-content">
-      <div class="content brand-form">
+      <div class="content share-form">
         <b-field
                 label="品牌名称"
                 :type="{'is-danger': errors.has('name')}"
@@ -12,29 +12,27 @@
           <b-input
                   name="name"
                   maxlength="100"
-                  v-model="brandToEdit.name"
+                  v-model="shareToEdit.name"
                   v-validate="'required'"></b-input>
         </b-field>
 
         <b-field grouped>
-          <b-field label="官网链接">
-            <b-input v-model="brandToEdit.url"></b-input>
-          </b-field>
           <b-field label="图片链接">
-            <b-input v-model="brandToEdit.picture"></b-input>
+            <b-input v-model="shareToEdit.picture"></b-input>
           </b-field>
         </b-field>
 
         <b-field grouped>
           <b-field label="状态">
-            <b-select placeholder="Select" v-model="brandToEdit.status">
+            <b-select placeholder="Select" v-model="shareToEdit.status">
               <option value="published">已发布</option>
+              <option value="submitted">已发布</option>
               <option value="draft">草稿</option>
             </b-select>
           </b-field>
 
           <b-field label="标签">
-            <b-taginput v-model="brandToEdit.tags"
+            <b-taginput v-model="shareToEdit.tags"
                         :data="tags"
                         :allow-new="true"
                         placeholder="添加标签">
@@ -43,7 +41,7 @@
         </b-field>
 
         <b-field label="品牌简介">
-          <wysiwyg v-model="brandToEdit.body"/>
+          <wysiwyg v-model="shareToEdit.body"/>
         </b-field>
 
         <div class="field is-grouped">
@@ -58,14 +56,14 @@
 
 <script>
     export default {
-        props: ['brand', 'editor-title', 'editor-submit'],
+        props: ['share', 'editor-title', 'editor-submit'],
         data() {
             return {
                 tags: ['标签1', '标签2']
             }
         },
         computed: {
-            brandToEdit: function () {
+            shareToEdit: function () {
                 return JSON.parse(JSON.stringify(this.brand));
             }
         },
@@ -73,7 +71,7 @@
             save() {
                 this.$validator.validateAll().then((result) => {
                     if (result) {
-                        this.$emit('brand-saved', this.brandToEdit)
+                        this.$emit('brand-saved', this.shareToEdit)
                     }
                 });
             }
@@ -82,7 +80,7 @@
 </script>
 
 <style>
-  .brand-form .editr {
+  .share-form .editr {
     height: 450px;
   }
 </style>

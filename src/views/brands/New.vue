@@ -8,7 +8,7 @@
         <nav class="breadcrumb" aria-label="breadcrumbs">
           <ul>
             <li><router-link to="/">Mindeal</router-link></li>
-            <li class="is-active"><a href="#" aria-current="page">Add New Brand</a></li>
+            <li class="is-active"><a href="#" aria-current="page">添加新品牌</a></li>
           </ul>
         </nav>
         <section>
