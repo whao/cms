@@ -13,7 +13,7 @@
             <span></span>
           </div>
         </div>
-        <div id="navMenu" class="navbar-menu">
+        <div id="navMenu" class="navbar-menu" v-if="user">
           <div class="navbar-start">
             <router-link to="/deals/list" class="navbar-item" :class="feature === 'deals' ? 'is-active' : ''">
               折扣
@@ -24,9 +24,15 @@
             <router-link to="/shares/list" class="navbar-item" :class="feature === 'shares' ? 'is-active' : ''">
               晒单
             </router-link>
-            <router-link to="/users" class="navbar-item" :class="feature === 'users' ? 'is-active' : ''">
-              APP Users
-            </router-link>
+          </div>
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <div class="buttons">
+                <a class="button is-light" @click="logout">
+                  退出
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -40,6 +46,17 @@
       computed: {
           feature: function () {
               return this.$route.path.split('/')[1];
+          },
+          user: function () {
+              return this.$store.state.user;
+          }
+      },
+      methods: {
+          logout() {
+              this.$Amplify.Auth.signOut().then(() => {
+                  this.$store.state.user = null;
+                  this.$router.push('/auth');
+              });
           }
       }
   }

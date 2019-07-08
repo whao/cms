@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "mindeal-cms-dev-20190707233157-authRole",
+            "UnauthRoleArn": "arn:aws:iam::742807870118:role/mindeal-cms-dev-20190707233157-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::742807870118:role/mindeal-cms-dev-20190707233157-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "mindeal-cms-dev-20190707233157-deployment",
+            "UnauthRoleName": "mindeal-cms-dev-20190707233157-unauthRole",
+            "StackName": "mindeal-cms-dev-20190707233157",
+            "StackId": "arn:aws:cloudformation:us-east-1:742807870118:stack/mindeal-cms-dev-20190707233157/52262470-a139-11e9-9f91-0a9ef6cbb06a"
+        }
+    }
+}
